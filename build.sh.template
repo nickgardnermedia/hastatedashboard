@@ -1,0 +1,15 @@
+#!/bin/bash
+# Build script for Home Assistant Dashboard
+# Copy this file to build.sh and update the values below
+
+docker build \
+  --build-arg VITE_HA_URL=http://192.168.1.150 \
+  --build-arg VITE_HA_PORT=8123 \
+  --build-arg VITE_HA_TOKEN=your_long_lived_access_token \
+  --build-arg DOCKER_HOST_IP=192.168.1.91 \
+  -t ha-dashboard:latest .
+
+# Uncomment the following lines to automatically stop, remove, and run the container
+# docker stop ha-dashboard
+# docker rm ha-dashboard
+# docker run -d -p 3007:3007 --name ha-dashboard ha-dashboard:latest

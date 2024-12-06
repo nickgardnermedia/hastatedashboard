@@ -38,6 +38,33 @@ cd hastatedashboard
 
 ### Build and Run with Docker
 
+#### Using Build Scripts (Recommended)
+
+1. Copy the appropriate template for your OS:
+   ```bash
+   # For Windows
+   copy build.bat.template build.bat
+   
+   # For Linux/Mac
+   cp build.sh.template build.sh
+   chmod +x build.sh
+   ```
+
+2. Edit the copied file (`build.bat` or `build.sh`) and update the values with your Home Assistant configuration.
+
+3. Run the build script:
+   ```bash
+   # For Windows
+   build.bat
+   
+   # For Linux/Mac
+   ./build.sh
+   ```
+
+#### Manual Build and Run
+
+If you prefer to run the commands manually:
+
 If you're rebuilding the container, first clean up existing containers and images:
 ```bash
 docker stop ha-dashboard
@@ -47,25 +74,23 @@ docker rmi ha-dashboard
 
 Then build and run:
 ```bash
-# Build the Docker image with your Home Assistant configuration
+# Build the Docker image with your configuration
 docker build \
   --build-arg VITE_HA_URL=http://192.168.1.150 \
   --build-arg VITE_HA_PORT=8123 \
   --build-arg VITE_HA_TOKEN=your_long_lived_access_token \
+  --build-arg DOCKER_HOST_IP=192.168.1.91 \
   -t ha-dashboard:latest .
 
-# Run the container (using localhost)
+# Run the container
 docker run -d -p 3007:3007 --name ha-dashboard ha-dashboard:latest
-
-# OR run with a specific host IP (useful for network access)
-docker run -d -p 3007:3007 -e DOCKER_HOST_IP=192.168.1.91 --name ha-dashboard ha-dashboard:latest
 ```
 
 > **Note**: 
-> - Replace the example values with your actual Home Assistant URL, port, and token
-> - The environment variables must be provided at build time because they are needed to compile the React application
+> - Replace the example values with your actual Home Assistant URL, port, token, and host IP
+> - All configuration is done at build time - you don't need to specify environment variables when running the container
+> - The DOCKER_HOST_IP is optional and defaults to 'localhost' if not specified
 > - Make sure to run these commands from your project directory where the Dockerfile is located
-> - If you want to access the dashboard from other devices on your network, use the DOCKER_HOST_IP environment variable with your host machine's IP address
 
 ### Access the Dashboard
 Open your browser and navigate to `http://localhost:3007`
@@ -110,13 +135,13 @@ Without these properly configured, the application will not be able to connect t
    cp .env.template .env
    ```
 
-## Environment Variables Reference
+## Build Arguments Reference
 
-| Variable | Description | Default | Required |
+| Argument | Description | Default | Required |
 |----------|-------------|---------|----------|
-| HOME_ASSISTANT_URL | Your Home Assistant URL (e.g., http://192.168.1.150) | - | ✅ Yes |
-| HOME_ASSISTANT_PORT | Your Home Assistant port | 8123 | ✅ Yes |
-| HOME_ASSISTANT_TOKEN | Your Long-Lived Access Token | - | ✅ Yes |
+| VITE_HA_URL | Your Home Assistant URL (e.g., http://192.168.1.150) | - | ✅ Yes |
+| VITE_HA_PORT | Your Home Assistant port | 8123 | ✅ Yes |
+| VITE_HA_TOKEN | Your Long-Lived Access Token | - | ✅ Yes |
 | DOCKER_HOST_IP | Host IP for network access | localhost | ❌ No |
 
 ### Obtaining a Long-Lived Access Token
