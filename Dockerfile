@@ -19,7 +19,7 @@ ARG VITE_HA_PORT
 ARG VITE_HA_TOKEN
 ARG DOCKER_HOST_IP=localhost
 
-# Add http:// prefix if not present
+# Add http:// prefix if not present for React app
 ENV VITE_HA_URL=http://${VITE_HA_URL}
 ENV VITE_HA_PORT=${VITE_HA_PORT}
 ENV VITE_HA_TOKEN=${VITE_HA_TOKEN}
@@ -40,7 +40,7 @@ COPY --from=build /app/dist /usr/share/nginx/html
 # Copy nginx configuration template
 COPY nginx.conf /etc/nginx/templates/default.conf.template
 
-# Copy environment variables from build stage
+# Set runtime environment variables for nginx
 ENV DOCKER_HOST_IP=${DOCKER_HOST_IP}
 ENV HOME_ASSISTANT_URL=${VITE_HA_URL}
 ENV HOME_ASSISTANT_PORT=${VITE_HA_PORT}
