@@ -28,11 +28,16 @@ Before you begin, ensure you have the following:
    cd hastatedashboard
    ```
 
-2. Create a `.env` file with your Home Assistant configuration:
-   ```env
-   VITE_HA_URL=http://your.homeassistant.ip
-   VITE_HA_PORT=8123
-   VITE_HA_TOKEN=your_long_lived_access_token
+2. Create your environment file:
+   ```bash
+   # Copy the template file
+   cp .env.template .env
+   
+   # Edit .env with your Home Assistant details
+   # Replace the following values:
+   # - VITE_HA_URL: Your Home Assistant URL (e.g., http://homeassistant.local)
+   # - VITE_HA_PORT: Your Home Assistant port (default: 8123)
+   # - VITE_HA_TOKEN: Your Long-Lived Access Token
    ```
 
 3. Build and run with Docker:
@@ -40,7 +45,7 @@ Before you begin, ensure you have the following:
    docker build -t ha-dashboard .
    docker run -d \
      -p 3007:3007 \
-     -e HOME_ASSISTANT_URL=http://your.homeassistant.ip \
+     -e HOME_ASSISTANT_URL=http://homeassistant.local \
      -e HOME_ASSISTANT_PORT=8123 \
      -e HOME_ASSISTANT_TOKEN=your_long_lived_access_token \
      --name ha-dashboard \
@@ -49,13 +54,37 @@ Before you begin, ensure you have the following:
 
 4. Access the dashboard at `http://localhost:3007`
 
-## Environment Variables
+## Environment Setup
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| HOME_ASSISTANT_URL | Your Home Assistant URL (e.g., http://192.168.1.100) | - |
-| HOME_ASSISTANT_PORT | Your Home Assistant port | 8123 |
-| HOME_ASSISTANT_TOKEN | Your Long-Lived Access Token | - |
+⚠️ **IMPORTANT**: This application requires a valid Home Assistant configuration to function. You **MUST** provide the following environment variables:
+
+1. `HOME_ASSISTANT_URL`: The full URL of your Home Assistant instance
+2. `HOME_ASSISTANT_PORT`: The port your Home Assistant is running on (typically 8123)
+3. `HOME_ASSISTANT_TOKEN`: A Long-Lived Access Token from your Home Assistant instance
+
+Without these properly configured, the application will not be able to connect to your Home Assistant instance and will not function correctly.
+
+### Setting Up Environment Variables
+
+1. Copy the `.env.template` file to create a new `.env` file:
+   ```bash
+   cp .env.template .env
+   ```
+
+## Environment Variables Reference
+
+| Variable | Description | Default | Required |
+|----------|-------------|---------|----------|
+| HOME_ASSISTANT_URL | Your Home Assistant URL (e.g., http://homeassistant.local) | - | ✅ Yes |
+| HOME_ASSISTANT_PORT | Your Home Assistant port | 8123 | ✅ Yes |
+| HOME_ASSISTANT_TOKEN | Your Long-Lived Access Token | - | ✅ Yes |
+
+### Obtaining a Long-Lived Access Token
+
+1. Log in to your Home Assistant instance
+2. Click on your profile name (bottom left)
+3. Scroll to the bottom and create a Long-Lived Access Token
+4. Copy this token immediately (it won't be shown again) and use it in your environment configuration
 
 ## Development
 
