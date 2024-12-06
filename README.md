@@ -1,6 +1,6 @@
-# Home Assistant Entities Lookup Dashboard
+# Home Assistant Entity Dashboard
 
-A clean, modern dashboard for viewing and managing Home Assistant entities. Built with React, TypeScript, and Tailwind CSS, this dashboard provides a user-friendly interface to monitor your Home Assistant entities.
+A modern, containerized React dashboard for Home Assistant entity management. Built with TypeScript and featuring real-time status updates, this lightweight dashboard provides a clean interface for monitoring your Home Assistant entities.
 
 ## Features
 
@@ -14,9 +14,7 @@ A clean, modern dashboard for viewing and managing Home Assistant entities. Buil
 
 ## Prerequisites
 
-Before you begin, ensure you have the following:
-
-- Docker installed on your system
+- Docker installed on your system (for containerized deployment)
 - Home Assistant instance running on your local network
 - Home Assistant Long-Lived Access Token ([How to generate](https://developers.home-assistant.io/docs/auth_api/#long-lived-access-token))
 - Git installed on your system (if not, follow the instructions below)
@@ -30,7 +28,7 @@ To install Git on your system, follow these steps:
 - **Mac (with Homebrew)**: `brew install git`
 - **Windows**: Download and install from the official Git website: https://git-scm.com/download/win
 
-## Quick Start
+## Quick Start (Docker Deployment)
 
 ### Clone the Repository
 ```bash
@@ -38,31 +36,46 @@ git clone https://github.com/nickgardnermedia/hastatedashboard.git
 cd hastatedashboard
 ```
 
-1. Create your environment file:
+### Build and Run with Docker
+```bash
+# Build the Docker image
+docker build -t ha-dashboard .
+
+# Run the container with your Home Assistant configuration
+docker run -d \
+  -p 3007:3007 \
+  -e HOME_ASSISTANT_URL=http://192.168.1.150 \
+  -e HOME_ASSISTANT_PORT=8123 \
+  -e HOME_ASSISTANT_TOKEN=your_long_lived_access_token \
+  --name ha-dashboard \
+  ha-dashboard
+```
+
+### Access the Dashboard
+Open your browser and navigate to `http://localhost:3007`
+
+## Local Development
+
+If you want to run the application locally without Docker for development:
+
+1. Clone the repository as shown above
+
+2. Create your environment file:
    ```bash
    # Copy the template file
    cp .env.template .env
    
-   # Edit .env with your Home Assistant details
-   # Replace the following values:
+   # Edit .env with your Home Assistant details:
    # - VITE_HA_URL: Your Home Assistant URL (e.g., http://192.168.1.150)
    # - VITE_HA_PORT: Your Home Assistant port (default: 8123)
    # - VITE_HA_TOKEN: Your Long-Lived Access Token
    ```
 
-2. Build and run with Docker:
+3. Install dependencies and start the development server:
    ```bash
-   docker build -t ha-dashboard .
-   docker run -d \
-     -p 3007:3007 \
-     -e HOME_ASSISTANT_URL=http://192.168.1.150 \
-     -e HOME_ASSISTANT_PORT=8123 \
-     -e HOME_ASSISTANT_TOKEN=your_long_lived_access_token \
-     --name ha-dashboard \
-     ha-dashboard
+   npm install
+   npm run dev
    ```
-
-3. Access the dashboard at `http://localhost:3007`
 
 ## Environment Setup
 
@@ -88,6 +101,8 @@ Without these properly configured, the application will not be able to connect t
 | HOME_ASSISTANT_URL | Your Home Assistant URL (e.g., http://192.168.1.150) | - | ✅ Yes |
 | HOME_ASSISTANT_PORT | Your Home Assistant port | 8123 | ✅ Yes |
 | HOME_ASSISTANT_TOKEN | Your Long-Lived Access Token | - | ✅ Yes |
+
+> **Note**: For Docker deployment, these variables are passed directly to the container using the `-e` flag. The `.env` file is only needed for local development.
 
 ### Obtaining a Long-Lived Access Token
 
