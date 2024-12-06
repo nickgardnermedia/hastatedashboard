@@ -40,7 +40,7 @@ COPY nginx.conf /etc/nginx/templates/default.conf.template
 
 # Copy environment variables from build stage
 ENV DOCKER_HOST_IP=${DOCKER_HOST_IP}
-ENV HOME_ASSISTANT_URL=${VITE_HA_URL}
+ENV HOME_ASSISTANT_URL=$(echo ${VITE_HA_URL} | sed 's|^http://||' | sed 's|^https://||')
 ENV HOME_ASSISTANT_PORT=${VITE_HA_PORT}
 
 # Expose port 3007
