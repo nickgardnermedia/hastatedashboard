@@ -1,5 +1,5 @@
 # Build stage
-FROM node:20-alpine as build
+FROM node:20-alpine AS build
 
 # Set working directory
 WORKDIR /app
@@ -13,19 +13,17 @@ RUN npm ci
 # Copy all files
 COPY . .
 
-# Set build-time environment variables with defaults
-ARG VITE_HA_URL
-ARG VITE_HA_PORT
-ARG VITE_HA_TOKEN
-ARG DOCKER_HOST_IP=localhost
+# Build arguments with defaults
+ARG VITE_HA_URL=""
+ARG VITE_HA_PORT=""
+ARG DOCKER_HOST_IP="localhost"
 
-# Set environment variables for React app
+# Set non-sensitive environment variables for React app
 ENV VITE_HA_URL=${VITE_HA_URL}
 ENV VITE_HA_PORT=${VITE_HA_PORT}
-ENV VITE_HA_TOKEN=${VITE_HA_TOKEN}
 ENV DOCKER_HOST_IP=${DOCKER_HOST_IP}
 
-# Build the app
+# Build the app (token will be passed at runtime via environment)
 RUN npm run build
 
 # Production stage
@@ -40,13 +38,14 @@ COPY --from=build /app/dist /usr/share/nginx/html
 # Copy nginx configuration template
 COPY nginx.conf /etc/nginx/templates/default.conf.template
 
-# Set runtime environment variables for nginx
-ENV DOCKER_HOST_IP=${DOCKER_HOST_IP}
-ENV HOME_ASSISTANT_URL=${VITE_HA_URL}
-ENV HOME_ASSISTANT_PORT=${VITE_HA_PORT}
+# Set default values for required variables
+ENV DOCKER_HOST_IP="localhost"
+ENV HOME_ASSISTANT_URL=""
+ENV HOME_ASSISTANT_PORT=""
+ENV HOME_ASSISTANT_TOKEN=""
 
 # Expose port 3007
 EXPOSE 3007
 
 # Use shell script to substitute environment variables and start nginx
-CMD ["/bin/sh", "-c", "envsubst '${HOME_ASSISTANT_URL} ${HOME_ASSISTANT_PORT} ${DOCKER_HOST_IP}' < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf && cat /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
+CMD ["/bin/sh", "-c", "envsubst '${HOME_ASSISTANT_URL} ${HOME_ASSISTANT_PORT} ${DOCKER_HOST_IP} ${HOME_ASSISTANT_TOKEN}' < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
