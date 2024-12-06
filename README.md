@@ -38,12 +38,18 @@ cd hastatedashboard
 
 ### Build and Run with Docker
 ```bash
-# Build the Docker image
-docker build -t ha-dashboard .
+# Build the Docker image with your Home Assistant configuration
+docker build \
+  --build-arg VITE_HA_URL=http://192.168.1.150 \
+  --build-arg VITE_HA_PORT=8123 \
+  --build-arg VITE_HA_TOKEN=your_long_lived_access_token \
+  -t ha-dashboard .
 
-# Run the container with your Home Assistant configuration
-docker run -d -p 3007:3007 -e HOME_ASSISTANT_URL=http://192.168.1.150 -e HOME_ASSISTANT_PORT=8123 -e HOME_ASSISTANT_TOKEN=your_long_lived_access_token --name ha-dashboard ha-dashboard
+# Run the container
+docker run -d -p 3007:3007 --name ha-dashboard ha-dashboard
 ```
+
+> **Note**: Replace the example values with your actual Home Assistant URL, port, and token. The environment variables must be provided at build time because they are needed to compile the React application.
 
 ### Access the Dashboard
 Open your browser and navigate to `http://localhost:3007`

@@ -13,6 +13,14 @@ RUN npm ci
 # Copy all files
 COPY . .
 
+# Set build-time environment variables with defaults
+ARG VITE_HA_URL
+ARG VITE_HA_PORT
+ARG VITE_HA_TOKEN
+ENV VITE_HA_URL=${VITE_HA_URL}
+ENV VITE_HA_PORT=${VITE_HA_PORT}
+ENV VITE_HA_TOKEN=${VITE_HA_TOKEN}
+
 # Build the app
 RUN npm run build
 
@@ -28,7 +36,7 @@ COPY --from=build /app/dist /usr/share/nginx/html
 # Copy nginx configuration template
 COPY nginx.conf /etc/nginx/templates/default.conf.template
 
-# Set environment variables with defaults
+# Set runtime environment variables with defaults
 ENV HOME_ASSISTANT_URL=http://192.168.1.150 \
     HOME_ASSISTANT_PORT=8123
 
