@@ -19,16 +19,26 @@ Before you begin, ensure you have the following:
 - Docker installed on your system
 - Home Assistant instance running on your local network
 - Home Assistant Long-Lived Access Token ([How to generate](https://developers.home-assistant.io/docs/auth_api/#long-lived-access-token))
+- Git installed on your system (if not, follow the instructions below)
+
+### Installing Git
+
+To install Git on your system, follow these steps:
+
+- **Ubuntu/Debian**: `sudo apt-get install git`
+- **Red Hat/Fedora/CentOS**: `sudo dnf install git`
+- **Mac (with Homebrew)**: `brew install git`
+- **Windows**: Download and install from the official Git website: https://git-scm.com/download/win
 
 ## Quick Start
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/hastatedashboard.git
-   cd hastatedashboard
-   ```
+### Clone the Repository
+```bash
+git clone https://github.com/nickgardnermedia/hastatedashboard.git
+cd hastatedashboard
+```
 
-2. Create your environment file:
+1. Create your environment file:
    ```bash
    # Copy the template file
    cp .env.template .env
@@ -40,7 +50,7 @@ Before you begin, ensure you have the following:
    # - VITE_HA_TOKEN: Your Long-Lived Access Token
    ```
 
-3. Build and run with Docker:
+2. Build and run with Docker:
    ```bash
    docker build -t ha-dashboard .
    docker run -d \
@@ -52,7 +62,7 @@ Before you begin, ensure you have the following:
      ha-dashboard
    ```
 
-4. Access the dashboard at `http://localhost:3007`
+3. Access the dashboard at `http://localhost:3007`
 
 ## Environment Setup
 
