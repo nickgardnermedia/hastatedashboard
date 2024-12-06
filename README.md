@@ -45,7 +45,7 @@ cd hastatedashboard
    
    # Edit .env with your Home Assistant details
    # Replace the following values:
-   # - VITE_HA_URL: Your Home Assistant URL (e.g., http://homeassistant.local)
+   # - VITE_HA_URL: Your Home Assistant URL (e.g., http://192.168.1.150)
    # - VITE_HA_PORT: Your Home Assistant port (default: 8123)
    # - VITE_HA_TOKEN: Your Long-Lived Access Token
    ```
@@ -55,7 +55,7 @@ cd hastatedashboard
    docker build -t ha-dashboard .
    docker run -d \
      -p 3007:3007 \
-     -e HOME_ASSISTANT_URL=http://homeassistant.local \
+     -e HOME_ASSISTANT_URL=http://192.168.1.150 \
      -e HOME_ASSISTANT_PORT=8123 \
      -e HOME_ASSISTANT_TOKEN=your_long_lived_access_token \
      --name ha-dashboard \
@@ -85,7 +85,7 @@ Without these properly configured, the application will not be able to connect t
 
 | Variable | Description | Default | Required |
 |----------|-------------|---------|----------|
-| HOME_ASSISTANT_URL | Your Home Assistant URL (e.g., http://homeassistant.local) | - | ✅ Yes |
+| HOME_ASSISTANT_URL | Your Home Assistant URL (e.g., http://192.168.1.150) | - | ✅ Yes |
 | HOME_ASSISTANT_PORT | Your Home Assistant port | 8123 | ✅ Yes |
 | HOME_ASSISTANT_TOKEN | Your Long-Lived Access Token | - | ✅ Yes |
 

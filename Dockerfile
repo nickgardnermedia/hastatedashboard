@@ -29,7 +29,7 @@ COPY --from=build /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/templates/default.conf.template
 
 # Set environment variables with defaults
-ENV HOME_ASSISTANT_URL=http://homeassistant.local \
+ENV HOME_ASSISTANT_URL=http://192.168.1.150 \
     HOME_ASSISTANT_PORT=8123
 
 # Expose port 3007
