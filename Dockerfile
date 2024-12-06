@@ -38,10 +38,11 @@ COPY nginx.conf /etc/nginx/templates/default.conf.template
 
 # Set runtime environment variables with defaults
 ENV HOME_ASSISTANT_URL=http://192.168.1.150 \
-    HOME_ASSISTANT_PORT=8123
+    HOME_ASSISTANT_PORT=8123 \
+    DOCKER_HOST_IP=localhost
 
 # Expose port 3007
 EXPOSE 3007
 
 # Use shell script to substitute environment variables and start nginx
-CMD ["/bin/sh", "-c", "envsubst '${HOME_ASSISTANT_URL} ${HOME_ASSISTANT_PORT}' < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
+CMD ["/bin/sh", "-c", "envsubst '${HOME_ASSISTANT_URL} ${HOME_ASSISTANT_PORT} ${DOCKER_HOST_IP}' < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]

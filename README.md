@@ -37,19 +37,35 @@ cd hastatedashboard
 ```
 
 ### Build and Run with Docker
+
+If you're rebuilding the container, first clean up existing containers and images:
+```bash
+docker stop ha-dashboard
+docker rm ha-dashboard
+docker rmi ha-dashboard
+```
+
+Then build and run:
 ```bash
 # Build the Docker image with your Home Assistant configuration
 docker build \
   --build-arg VITE_HA_URL=http://192.168.1.150 \
   --build-arg VITE_HA_PORT=8123 \
   --build-arg VITE_HA_TOKEN=your_long_lived_access_token \
-  -t ha-dashboard .
+  -t ha-dashboard:latest .
 
-# Run the container
-docker run -d -p 3007:3007 --name ha-dashboard ha-dashboard
+# Run the container (using localhost)
+docker run -d -p 3007:3007 --name ha-dashboard ha-dashboard:latest
+
+# OR run with a specific host IP (useful for network access)
+docker run -d -p 3007:3007 -e DOCKER_HOST_IP=192.168.1.91 --name ha-dashboard ha-dashboard:latest
 ```
 
-> **Note**: Replace the example values with your actual Home Assistant URL, port, and token. The environment variables must be provided at build time because they are needed to compile the React application.
+> **Note**: 
+> - Replace the example values with your actual Home Assistant URL, port, and token
+> - The environment variables must be provided at build time because they are needed to compile the React application
+> - Make sure to run these commands from your project directory where the Dockerfile is located
+> - If you want to access the dashboard from other devices on your network, use the DOCKER_HOST_IP environment variable with your host machine's IP address
 
 ### Access the Dashboard
 Open your browser and navigate to `http://localhost:3007`
@@ -101,8 +117,7 @@ Without these properly configured, the application will not be able to connect t
 | HOME_ASSISTANT_URL | Your Home Assistant URL (e.g., http://192.168.1.150) | - | ✅ Yes |
 | HOME_ASSISTANT_PORT | Your Home Assistant port | 8123 | ✅ Yes |
 | HOME_ASSISTANT_TOKEN | Your Long-Lived Access Token | - | ✅ Yes |
-
-> **Note**: For Docker deployment, these variables are passed directly to the container using the `-e` flag. The `.env` file is only needed for local development.
+| DOCKER_HOST_IP | Host IP for network access | localhost | ❌ No |
 
 ### Obtaining a Long-Lived Access Token
 
