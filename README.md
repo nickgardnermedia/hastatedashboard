@@ -42,13 +42,7 @@ cd hastatedashboard
 docker build -t ha-dashboard .
 
 # Run the container with your Home Assistant configuration
-docker run -d \
-  -p 3007:3007 \
-  -e HOME_ASSISTANT_URL=http://192.168.1.150 \
-  -e HOME_ASSISTANT_PORT=8123 \
-  -e HOME_ASSISTANT_TOKEN=your_long_lived_access_token \
-  --name ha-dashboard \
-  ha-dashboard
+docker run -d -p 3007:3007 -e HOME_ASSISTANT_URL=http://192.168.1.150 -e HOME_ASSISTANT_PORT=8123 -e HOME_ASSISTANT_TOKEN=your_long_lived_access_token --name ha-dashboard ha-dashboard
 ```
 
 ### Access the Dashboard
