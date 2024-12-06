@@ -18,7 +18,9 @@ ARG VITE_HA_URL
 ARG VITE_HA_PORT
 ARG VITE_HA_TOKEN
 ARG DOCKER_HOST_IP=localhost
-ENV VITE_HA_URL=${VITE_HA_URL}
+
+# Add http:// prefix if not present
+ENV VITE_HA_URL=http://${VITE_HA_URL}
 ENV VITE_HA_PORT=${VITE_HA_PORT}
 ENV VITE_HA_TOKEN=${VITE_HA_TOKEN}
 ENV DOCKER_HOST_IP=${DOCKER_HOST_IP}
@@ -40,11 +42,11 @@ COPY nginx.conf /etc/nginx/templates/default.conf.template
 
 # Copy environment variables from build stage
 ENV DOCKER_HOST_IP=${DOCKER_HOST_IP}
-ENV HOME_ASSISTANT_URL=$(echo ${VITE_HA_URL} | sed 's|^http://||' | sed 's|^https://||')
+ENV HOME_ASSISTANT_URL=${VITE_HA_URL}
 ENV HOME_ASSISTANT_PORT=${VITE_HA_PORT}
 
 # Expose port 3007
 EXPOSE 3007
 
 # Use shell script to substitute environment variables and start nginx
-CMD ["/bin/sh", "-c", "envsubst '${HOME_ASSISTANT_URL} ${HOME_ASSISTANT_PORT} ${DOCKER_HOST_IP}' < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
+CMD ["/bin/sh", "-c", "envsubst '${HOME_ASSISTANT_URL} ${HOME_ASSISTANT_PORT} ${DOCKER_HOST_IP}' < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf && cat /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]

@@ -3,7 +3,7 @@ REM Build script for Home Assistant Dashboard
 REM Copy this file to build.bat and update the values below
 
 docker build ^
-  --build-arg VITE_HA_URL=http://192.168.1.150 ^
+  --build-arg VITE_HA_URL=192.168.1.150 ^
   --build-arg VITE_HA_PORT=8123 ^
   --build-arg VITE_HA_TOKEN=your_long_lived_access_token ^
   --build-arg DOCKER_HOST_IP=192.168.1.91 ^
